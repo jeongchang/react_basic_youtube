@@ -1,29 +1,29 @@
 import { useEffect, useState } from 'react';
-import './app.css';
+import SearchHeader from './components/search_header/search_header';
 import VideoList from './components/video_list/video_list';
+import styles from './app.module.css';
 
-function App() {
+function App({ youtube }) {
 	const [videos, setVideos] = useState([]);
 
+	const search = (query) => {
+		youtube
+			.search(query) //
+			.then((videos) => setVideos(videos));
+	};
+
 	useEffect(() => {
-		//javscdript fetch(youtube api)
-		const requestOptions = {
-			method: 'GET',
-			redirect: 'follow',
-		};
+		youtube
+			.mostPopular() //
+			.then((videos) => setVideos(videos));
+	}, []);
 
-		fetch(
-			'https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=AIzaSyAhoCez0b2I99DwAfxGzvfdO1gsMTGhY7w',
-			requestOptions
-		)
-			.then((response) => response.json())
-			.then((result) => {
-				setVideos(result.items);
-			})
-			.catch((error) => console.log('error', error));
-	}, []); //두번째 변수가 없으면 매번, []빈 배열이 있으면 한 번만, 배열의 값(변수명)이 있으면 변수값이 변경될 때마다 callback
-
-	return <VideoList videos={videos} />;
+	return (
+		<div className={styles.app}>
+			<SearchHeader onSearch={search} />
+			<VideoList videos={videos} />
+		</div>
+	);
 }
 
 export default App;

@@ -17,4 +17,4 @@ const VideoItem = ({ video: { snippet } }) => (
 	</li>
 );
 
-export default VideoItem;
+export default VideoItem;	
